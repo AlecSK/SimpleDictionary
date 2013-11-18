@@ -32,23 +32,22 @@ namespace SimpleDictionary.Utility
         {
             if (TraceMode != TraceModeEnum.None)
             {
-                Debug.Print(String.Format("{0}: {1} - {2}[{3}]", DateTime.Now.ToLongTimeString(), message, source, id));
+                Debug.Print("{0}: {1} - {2}[{3}]", DateTime.Now.ToLongTimeString(), message, source, id);
             }
         }
 
         // Writes specified text to the log file.
-        public static void WriteToLog(string TextToLog)
+        public static void WriteToLog(string textToLog)
         {
             try
             {
-                StreamWriter sw;
                 // Define log file path and name. 
                 string currentLogFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
                     AppDomain.CurrentDomain.FriendlyName, @"Log.txt");
                 //string CurrentLogFilePath = AppDomain.CurrentDomain.BaseDirectory + AppDomain.CurrentDomain.FriendlyName + @"Log.txt";
-                sw = new StreamWriter(currentLogFilePath, true);
+                StreamWriter sw = new StreamWriter(currentLogFilePath, true);
                 // Write data to log file. 
-                sw.WriteLine(DateTime.Now + ": " + TextToLog);
+                sw.WriteLine(DateTime.Now + ": " + textToLog);
                 sw.Flush();
                 sw.Close();
             }
@@ -123,7 +122,7 @@ namespace SimpleDictionary.Utility
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="ValidationEventArgs" /> instance containing the event data.</param>
         /// <exception cref="XmlFormatException">Исключение типа XmlFormatException.</exception>
-        private static void ValidationEventHandler(object sender, ValidationEventArgs e)
+        private static void XmlValidationEventHandler(object sender, ValidationEventArgs e)
         {
             switch (e.Severity)
             {
@@ -140,30 +139,30 @@ namespace SimpleDictionary.Utility
         /// <summary>
         /// Проверка соответсвия XML текста схеме. В случае ошибки, генерится XmlFormatException или XmlException.
         /// </summary>
-        /// <param name="XMLText">Текст в формате XML.</param>
-        /// <param name="XMLSchema">Текстовая схема XSD.</param>
-        public static void ValidateXML(string XMLText, string XMLSchema)
+        /// <param name="xmlText">Текст в формате XML.</param>
+        /// <param name="xmlSchema">Текстовая схема XSD.</param>
+        public static void ValidateXML(string xmlText, string xmlSchema)
         {
             XmlDocument tmpDoc = new XmlDocument();
-            tmpDoc.LoadXml(XMLText);
-            tmpDoc.Schemas.Add("", XmlReader.Create(new StringReader(XMLSchema)));
-            ValidationEventHandler eventHandler = new ValidationEventHandler(ValidationEventHandler);
+            tmpDoc.LoadXml(xmlText);
+            tmpDoc.Schemas.Add("", XmlReader.Create(new StringReader(xmlSchema)));
+            ValidationEventHandler eventHandler = XmlValidationEventHandler;
             tmpDoc.Validate(eventHandler);
         }
 
         /// <summary>
         /// Соответствует ли XML схеме. 
         /// </summary>
-        /// <param name="XMLText">Текст в формате XML.</param>
-        /// <param name="XMLSchema">Текстовая схема XSD.</param>
-        public static bool IsValidXML(string XMLText, string XMLSchema)
+        /// <param name="xmlText">Текст в формате XML.</param>
+        /// <param name="xmlSchema">Текстовая схема XSD.</param>
+        public static bool IsValidXML(string xmlText, string xmlSchema)
         {
             try
             {
                 XmlDocument tmpDoc = new XmlDocument();
-                tmpDoc.LoadXml(XMLText);
-                tmpDoc.Schemas.Add("", XmlReader.Create(new StringReader(XMLSchema)));
-                ValidationEventHandler eventHandler = new ValidationEventHandler(ValidationEventHandler);
+                tmpDoc.LoadXml(xmlText);
+                tmpDoc.Schemas.Add("", XmlReader.Create(new StringReader(xmlSchema)));
+                ValidationEventHandler eventHandler = XmlValidationEventHandler;
                 tmpDoc.Validate(eventHandler);
             }
             catch (XmlException)
@@ -181,11 +180,12 @@ namespace SimpleDictionary.Utility
 
         public static bool CheckSDConnection(string connString)
         {
-            SqlConnectionStringBuilder sb = new SqlConnectionStringBuilder(connString);
-            sb.ApplicationName = "Simple Dictionary";
-            sb.ConnectTimeout = 2;
-            sb.WorkstationID = "Computer Name";
-            // Data Source=10.1.1.127;Initial Catalog=PRIZ;Persist Security Info=True;User ID=sa;Password=zXcvbnm512;Connect Timeout=2;Application Name="Simple Dictionary";Workstation ID="Computer Name"
+            SqlConnectionStringBuilder sb = new SqlConnectionStringBuilder(connString)
+            {
+                ApplicationName = "Simple Dictionary",
+                ConnectTimeout = 2,
+                WorkstationID = "Computer Name"
+            };
             try
             {
                 using (DataContext db = new DataContext(sb.ConnectionString))
@@ -301,18 +301,15 @@ namespace SimpleDictionary.Utility
             return sSect;
         }
 
-        public static void SaveSetting(string Section, string Key, string Setting)
+        public static void SaveSetting(string section, string key, string setting)
         {
-            string text1 = FormRegKey(Section);
+            string text1 = FormRegKey(section);
             if (System.Windows.Forms.Application.UserAppDataRegistry == null) return;
             RegistryKey key1 = System.Windows.Forms.Application.UserAppDataRegistry.CreateSubKey(text1);
             if (key1 == null) return;
             try
             {
-                key1.SetValue(Key, Setting);
-            }
-            catch (Exception)
-            {
+                key1.SetValue(key, setting);
             }
             finally
             {
@@ -320,16 +317,16 @@ namespace SimpleDictionary.Utility
             }
         }
 
-        public static string GetSetting(string Section, string Key, string Default = "")
+        public static string GetSetting(string section, string key, string Default = "")
         {
             if (Default == null) Default = "";
-            string text2 = FormRegKey(Section);
+            string text2 = FormRegKey(section);
             if (System.Windows.Forms.Application.UserAppDataRegistry != null)
             {
                 RegistryKey key1 = System.Windows.Forms.Application.UserAppDataRegistry.OpenSubKey(text2);
                 if (key1 != null)
                 {
-                    object obj1 = key1.GetValue(Key, Default);
+                    object obj1 = key1.GetValue(key, Default);
                     key1.Close();
                     if (obj1 != null)
                     {

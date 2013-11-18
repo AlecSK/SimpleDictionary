@@ -84,11 +84,7 @@ namespace SimpleDictionary.Models
 
         public ObservableCollection<SDOption> DictionaryOptions
         {
-            get
-            {
-                if (_options == null) _options = LoadOptions(); //DictionaryOptions = LoadOptions();
-                return _options;
-            }
+            get { return _options ?? (_options = LoadOptions()); }
             set
             {
                 _options = value;
@@ -116,7 +112,7 @@ namespace SimpleDictionary.Models
 
         private ObservableCollection<SDOption> LoadOptions()
         {
-            if (String.IsNullOrEmpty(base._memoValue) || !Utils.IsValidXML(_memoValue, Resources.SDOptions))
+            if (String.IsNullOrEmpty(_memoValue) || !Utils.IsValidXML(_memoValue, Resources.SDOptions))
             {
                 //Заполняем набор опций значениями по-умолчанию.
                 _options = new ObservableCollection<SDOption>
@@ -143,8 +139,8 @@ namespace SimpleDictionary.Models
 
         #region Implementation of IEditableObject
 
-        private SDictionary backupCopy;
-        private bool inEdit;
+        private SDictionary _backupCopy;
+        private bool _inEdit;
 
 
         /// <summary>
@@ -152,9 +148,9 @@ namespace SimpleDictionary.Models
         /// </summary>
         public void BeginEdit()
         {
-            if (inEdit) return;
-            inEdit = true;
-            backupCopy = this.MemberwiseClone() as SDictionary;
+            if (_inEdit) return;
+            _inEdit = true;
+            _backupCopy = this.MemberwiseClone() as SDictionary;
         }
 
         /// <summary>
@@ -162,9 +158,9 @@ namespace SimpleDictionary.Models
         /// </summary>
         public void EndEdit()
         {
-            if (!inEdit) return;
-            inEdit = false;
-            backupCopy = null;
+            if (!_inEdit) return;
+            _inEdit = false;
+            _backupCopy = null;
         }
 
         /// <summary>
@@ -172,24 +168,24 @@ namespace SimpleDictionary.Models
         /// </summary>
         public void CancelEdit()
         {
-            if (!inEdit) return;
-            inEdit = false;
+            if (!_inEdit) return;
+            _inEdit = false;
 
-            this.CurrentN = backupCopy.CurrentN;
-            this.ItemName = backupCopy.ItemName;
-            this.Description = backupCopy.Description;
-            this.SortN = backupCopy.SortN;
-            this.Comment = backupCopy.Comment;
-            this.IsDeleted = backupCopy.IsDeleted;
-            this.CreationDate = backupCopy.CreationDate;
-            this.ChangeDate = backupCopy.ChangeDate;
+            this.CurrentN = _backupCopy.CurrentN;
+            this.ItemName = _backupCopy.ItemName;
+            this.Description = _backupCopy.Description;
+            this.SortN = _backupCopy.SortN;
+            this.Comment = _backupCopy.Comment;
+            this.IsDeleted = _backupCopy.IsDeleted;
+            this.CreationDate = _backupCopy.CreationDate;
+            this.ChangeDate = _backupCopy.ChangeDate;
 
-            this.IntValue = backupCopy.IntValue;
-            this.FloatValue = backupCopy.FloatValue;
-            this.StringValue = backupCopy.StringValue;
-            this.DateValue = backupCopy.DateValue;
-            this.MultiValue = backupCopy.MultiValue;
-            this.MemoValue = backupCopy.MemoValue;
+            this.IntValue = _backupCopy.IntValue;
+            this.FloatValue = _backupCopy.FloatValue;
+            this.StringValue = _backupCopy.StringValue;
+            this.DateValue = _backupCopy.DateValue;
+            this.MultiValue = _backupCopy.MultiValue;
+            this.MemoValue = _backupCopy.MemoValue;
 
             this.IsChanged = false;
         }
@@ -239,16 +235,6 @@ namespace SimpleDictionary.Models
 
         #endregion
 
-//        public override int? IntValue
-//        {
-//            get { return base.IntValue; }
-//            set
-//            {
-//                base.IntValue = value;
-//                RaisePropertyChanged("IsCodeGenerationOptionNone");
-//                RaisePropertyChanged("IsCodeGenerationOptionAsClass");
-//                RaisePropertyChanged("IsCodeGenerationOptionAsEnum");
-//            }
-//        }
+
     }
 }

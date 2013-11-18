@@ -28,16 +28,16 @@ namespace SimpleDictionary.Utility
     /// </summary>
     public static class CodeGenerator
     {
-        public static string GetFullFileName()
-        {
-            string dirName = Utils.ReadStringParameter("ConstantsSavePath");
-            dirName = dirName ?? AppDomain.CurrentDomain.BaseDirectory;
-            string fileName = Utils.ReadStringParameter("ConstantsFileName");
-            return System.IO.Path.Combine(dirName, fileName);
-        }
+        //public static string GetFullFileName()
+        //{
+        //    string dirName = Utils.ReadStringParameter("ConstantsSavePath");
+        //    dirName = dirName ?? AppDomain.CurrentDomain.BaseDirectory;
+        //    string fileName = Utils.ReadStringParameter("ConstantsFileName");
+        //    return System.IO.Path.Combine(dirName, fileName);
+        //}
 
 
-        public static string GetSuffix(string paramCode)
+        private static string GetSuffix(string paramCode)
         {
             string suffix = "";
             switch (paramCode)
@@ -65,7 +65,7 @@ namespace SimpleDictionary.Utility
         }
 
 
-        public static string GetConstType(string paramCode)
+        private static string GetConstType(string paramCode)
         {
             string paramType = "";
             switch (paramCode)
@@ -93,7 +93,7 @@ namespace SimpleDictionary.Utility
         }
 
 
-        public static string GetConstValue(string paramCode, Linq.SimpleDictionary sdRow)
+        private static string GetConstValue(string paramCode, Linq.SimpleDictionary sdRow)
         {
             string paramValue = "";
             switch (paramCode)
@@ -128,7 +128,7 @@ namespace SimpleDictionary.Utility
         }
 
 
-        public static string Tabs(int indent)
+        private static string Tabs(int indent)
         {
             string tabs = "";
             for (int i = 0; i < indent; i++)
@@ -139,7 +139,7 @@ namespace SimpleDictionary.Utility
         }
 
 
-        public static void WriteSummary(System.IO.StreamWriter sw, string text, int indent)
+        private static void WriteSummary(System.IO.StreamWriter sw, string text, int indent)
         {
             if (string.IsNullOrEmpty(text)) return;
 
@@ -149,7 +149,7 @@ namespace SimpleDictionary.Utility
         }
 
 
-        public static void WriteRemarks(System.IO.StreamWriter sw, string multitext, int indent)
+        private static void WriteRemarks(System.IO.StreamWriter sw, string multitext, int indent)
         {
             if (string.IsNullOrEmpty(multitext)) return;
             var textLines = multitext.Split(Const.CrLf, StringSplitOptions.RemoveEmptyEntries);
@@ -207,8 +207,6 @@ namespace SimpleDictionary.Utility
 
         private static void WriteConstants(StreamWriter sw)
         {
-            bool firstLine;
-
             using (var dc = new SDLinqDataContext(App.ConnectionString))
             {
                 //Для всех словарей, отмеченных для генерации
@@ -240,8 +238,7 @@ namespace SimpleDictionary.Utility
                             sw.WriteLine("{0}public enum {1}Enum", Tabs(1), dict.Name);
                             sw.WriteLine("{0}{{", Tabs(1));
 
-                            firstLine = true;
-
+                            bool firstLine = true;
                             var dictValues = dc.SimpleDictionary.Where(e => e.ParentSD == parentSD && e.IntValue != null);
                             foreach (var v in dictValues)
                             {
@@ -298,14 +295,17 @@ namespace SimpleDictionary.Utility
             StreamWriter sw = new System.IO.StreamWriter(tempFile, false);
             using (var dc = new SDLinqDataContext(App.ConnectionString))
             {
-                Linq.SimpleDictionary row;
-                row = dc.SimpleDictionary.FirstOrDefault(r => r.Name == "Header");
-                string fileHeader = row.MemoValue;
-                row = dc.SimpleDictionary.FirstOrDefault(r => r.Name == "Version");
-                sw.WriteLine(fileHeader, Environment.UserName, row.DateValue, row.StringValue + "." + row.IntValue);
+                Linq.SimpleDictionary row = dc.SimpleDictionary.FirstOrDefault(r => r.Name == "Header");
+                if (row != null)
+                {
+                    string fileHeader = row.MemoValue;
+                    row = dc.SimpleDictionary.FirstOrDefault(r => r.Name == "Version");
+                    if (row != null)
+                        sw.WriteLine(fileHeader, Environment.UserName, row.DateValue, row.StringValue + "." + row.IntValue);
+                }
 
                 row = dc.SimpleDictionary.FirstOrDefault(r => r.Name == "DirectivesUsing");
-                sw.WriteLine(row.MemoValue);
+                if (row != null) sw.WriteLine(row.MemoValue);
                 sw.WriteLine();
                 sw.WriteLine("namespace {0}", Utils.ReadStringParameter("Namespace"));
                 sw.WriteLine("{");

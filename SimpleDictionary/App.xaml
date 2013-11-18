@@ -12,12 +12,6 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Themes/MyTheme.xaml" />
                 <ResourceDictionary Source="Themes/MyDataGridTheme.xaml" />
-
-                <!--<ResourceDictionary Source="Views\Resources.xaml"/>-->
-
-                <!--<ResourceDictionary Source="/Themes/DarkOrange/Brushes.xaml"/>
-                <ResourceDictionary Source="/Themes/DarkOrange/Core.xaml"/>-->
-                <!--<ResourceDictionary Source="..\Themes\DarkOrange\Icons.xaml"/>-->
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

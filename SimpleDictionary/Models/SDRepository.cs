@@ -245,9 +245,12 @@ namespace SimpleDictionary.Models
 
             var d = GetLocalCopyBySD(11);
             var v = d.DictionaryValues.FirstOrDefault(r => r.ItemName == "Version");
-            v.IntValue = newMinorVersion;
-            v.DateValue = newVersionDate;
-            v.IsChanged = false;
+            if (v != null)
+            {
+                v.IntValue = newMinorVersion;
+                v.DateValue = newVersionDate;
+                v.IsChanged = false;
+            }
             //d.IsChanged = false;
 
             using (var dc = new SDLinqDataContext(App.ConnectionString))
