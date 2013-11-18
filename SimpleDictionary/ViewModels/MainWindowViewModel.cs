@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel.Composition;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
-using System.ComponentModel.Composition;
-using SimpleDictionary.Models;
-using SimpleDictionary.Infrastructure;
 using SimpleDictionary.Dialog;
+using SimpleDictionary.Infrastructure;
+using SimpleDictionary.Models;
 using SimpleDictionary.Utility;
 
 namespace SimpleDictionary.ViewModels
@@ -30,44 +30,33 @@ namespace SimpleDictionary.ViewModels
 
     public class CurrentNRangeRule : ValidationRule
     {
-        private int _min;
-        private int _max;
+        public int Min { get; set; }
 
-        public CurrentNRangeRule()
-        {
-        }
-
-        public int Min
-        {
-            get { return _min; }
-            set { _min = value; }
-        }
-
-        public int Max
-        {
-            get { return _max; }
-            set { _max = value; }
-        }
+        public int Max { get; set; }
 
         public override ValidationResult Validate(object value, CultureInfo cultureInfo)
         {
             if (value != null)
             {
                 Debug.Print("Тип: {0}, значение: {1}", value.GetType(), value);
-                SDValue dictValue = (value as BindingGroup).Items[0] as SDValue;
-                if (dictValue != null)
+                BindingGroup bindingGroup = value as BindingGroup;
+                if (bindingGroup != null)
                 {
-                    int currentN;
-                    try
+                    SDValue dictValue = bindingGroup.Items[0] as SDValue;
+                    if (dictValue != null)
                     {
-                        currentN = dictValue.CurrentN;
+                        int currentN;
+                        try
+                        {
+                            currentN = dictValue.CurrentN;
+                        }
+                        catch (Exception e)
+                        {
+                            return new ValidationResult(false, "Illegal characters or " + e.Message);
+                        }
+                        if ((currentN < Min) || (currentN > Max))
+                            return new ValidationResult(false, "Код должен быть в диапазоне: " + Min + " - " + Max + ".");
                     }
-                    catch (Exception e)
-                    {
-                        return new ValidationResult(false, "Illegal characters or " + e.Message);
-                    }
-                    if ((currentN < Min) || (currentN > Max))
-                        return new ValidationResult(false, "Код должен быть в диапазоне: " + Min + " - " + Max + ".");
                 }
             }
             return new ValidationResult(true, null);
@@ -76,18 +65,21 @@ namespace SimpleDictionary.ViewModels
 
     public class SDValueValidationRule : ValidationRule
     {
-        public override ValidationResult Validate(object value, System.Globalization.CultureInfo cultureInfo)
+        public override ValidationResult Validate(object value, CultureInfo cultureInfo)
         {
-            SDValue dictValue = (value as BindingGroup).Items[0] as SDValue;
-
-            if (!dictValue.IsValid) return new ValidationResult(false, dictValue.SysMessage);
-
-            if (dictValue.SortN < 0)
+            if (value != null)
             {
-                return new ValidationResult(false, "Вес в сортировке должен быть больше нуля.");
+                SDValue dictValue = (value as BindingGroup).Items[0] as SDValue;
+
+                Debug.Assert(dictValue != null, "dictValue != null");
+                if (!dictValue.IsValid) return new ValidationResult(false, dictValue.SysMessage);
+
+                if (dictValue.SortN < 0)
+                {
+                    return new ValidationResult(false, "Вес в сортировке должен быть больше нуля.");
+                }
             }
-            else
-                return ValidationResult.ValidResult;
+            return ValidationResult.ValidResult;
         }
     }
 
@@ -104,7 +96,7 @@ namespace SimpleDictionary.ViewModels
         private SDValue _activeSDValue;
         private ObservableCollection<SearchResult> _searchResults;
         private SearchResult _searchResultSelectedItem;
-        private bool _isDataChanged = false;
+        private bool _isDataChanged;
         private bool _canNavigate = true;
         private string _filterString;
 
@@ -127,8 +119,8 @@ namespace SimpleDictionary.ViewModels
             if (dialogInterface == null) throw new ArgumentNullException("dialogInterface");
 
 
-            this._dataRepository = repositoryInterface;
-            this._dialogService = dialogInterface;
+            _dataRepository = repositoryInterface;
+            _dialogService = dialogInterface;
             LoadSearchResults();
         }
 
@@ -186,7 +178,7 @@ namespace SimpleDictionary.ViewModels
         private void SetRowDetailsVisibility(DataGridRowDetailsVisibilityMode newMode)
         {
             SelectedRowDetailsVisibilityMode =
-                this.RowDetailsVisibilityModesList.FirstOrDefault(m => m.VisibilityMode == newMode);
+                RowDetailsVisibilityModesList.FirstOrDefault(m => m.VisibilityMode == newMode);
         }
 
         public bool IsRowDetailsVisibleWhenSelected
@@ -252,7 +244,7 @@ namespace SimpleDictionary.ViewModels
         {
             //функция вызывается ротационно из  метода CanSaveExecute
             bool res;
-            if (this.ActiveDictionary == null)
+            if (ActiveDictionary == null)
                 res = false;
             else
             {
@@ -402,7 +394,7 @@ namespace SimpleDictionary.ViewModels
         [DebuggerStepThrough]
         private Boolean CanDeleteChildExecute()
         {
-            return this.ActiveSDValue != null;
+            return ActiveSDValue != null;
         }
 
 
@@ -416,7 +408,7 @@ namespace SimpleDictionary.ViewModels
         [DebuggerStepThrough]
         private Boolean CanDeleteExecute()
         {
-            return this.ActiveDictionary != null;
+            return ActiveDictionary != null;
         }
 
 
@@ -437,7 +429,7 @@ namespace SimpleDictionary.ViewModels
         [DebuggerStepThrough]
         private Boolean CanNewChildExecute()
         {
-            return this.ActiveDictionary != null;
+            return ActiveDictionary != null;
         }
 
 
@@ -461,7 +453,7 @@ namespace SimpleDictionary.ViewModels
             if (!CanSaveExecute()) return;
             try
             {
-                if (_dataRepository.Save(this.ActiveDictionary))
+                if (_dataRepository.Save(ActiveDictionary))
                 {
                     ResetForm();
                     //Очищаем фильтр и обновляем список словарей
@@ -476,7 +468,7 @@ namespace SimpleDictionary.ViewModels
             }
             catch (Exception ex)
             {
-                this._dialogService.ShowException(ex.Message);
+                _dialogService.ShowException(ex.Message);
             }
         }
 
@@ -485,23 +477,23 @@ namespace SimpleDictionary.ViewModels
             var saveErrors = ActiveDictionary.DictionaryValues.Where(r => r.IsValid == false);
             foreach (SDValue saveError in saveErrors)
             {
-                this._dialogService.ShowException(saveError.SysMessage);
+                _dialogService.ShowException(saveError.SysMessage);
             }
         }
 
         private void DeleteExecute()
         {
             if (!CanDeleteExecute() ||
-                this._dialogService.ShowMessage(Const.CONFIRM_DELETE_DICTIONARY, Const.CONFIRM_DELETE_CAPTION,
+                _dialogService.ShowMessage(Const.CONFIRM_DELETE_DICTIONARY, Const.CONFIRM_DELETE_CAPTION,
                     DialogButton.OKCancel, DialogImage.Question) != DialogResponse.OK) return;
             try
             {
-                _dataRepository.Remove(this.ActiveDictionary);
+                _dataRepository.Remove(ActiveDictionary);
                 ResetForm();
             }
             catch (Exception ex)
             {
-                this._dialogService.ShowException(ex.Message);
+                _dialogService.ShowException(ex.Message);
             }
         }
 
@@ -517,18 +509,18 @@ namespace SimpleDictionary.ViewModels
             try
             {
                 string fileName = CodeGenerator.WriteConstantsToFile();
-                System.Diagnostics.Process.Start("notepad.exe", fileName);
+                Process.Start("notepad.exe", fileName);
             }
             catch (Exception ex)
             {
-                this._dialogService.ShowException(ex.Message);
+                _dialogService.ShowException(ex.Message);
             }
         }
 
         private void NewExecute()
         {
-            this.ActiveDictionary = _dataRepository.Create();
-            this.SearchResultSelectedItem = null;
+            ActiveDictionary = _dataRepository.Create();
+            SearchResultSelectedItem = null;
             //_filterString = null;
         }
 
@@ -544,15 +536,15 @@ namespace SimpleDictionary.ViewModels
                 if (ActiveSDValue != null)
                 {
                     lastChildSD = ActiveSDValue.SD;
-                    this.ActiveSDValue = null;
+                    ActiveSDValue = null;
                 }
-                this.ActiveDictionary = null;
+                ActiveDictionary = null;
             }
             ////Очищаем репозитарий
             //_repositoryInterface = null;
             //_repositoryInterface = new SDRepository();
             LoadSearchResults();
-            this.SearchResultSelectedItem = _searchResults.FirstOrDefault(r => r.SD == lastSD);
+            SearchResultSelectedItem = _searchResults.FirstOrDefault(r => r.SD == lastSD);
             if (ActiveDictionary != null)
             {
                 ActiveSDValue = ActiveDictionary.DictionaryValues.FirstOrDefault(r => r.SD == lastChildSD);
@@ -572,15 +564,15 @@ namespace SimpleDictionary.ViewModels
                 if (ActiveSDValue != null)
                 {
                     lastChildSD = ActiveSDValue.SD;
-                    this.ActiveSDValue = null;
+                    ActiveSDValue = null;
                 }
-                this.ActiveDictionary = null;
+                ActiveDictionary = null;
             }
             //Очищаем репозитарий
             _dataRepository = null;
             _dataRepository = new SDRepository();
             LoadSearchResults();
-            this.SearchResultSelectedItem = _searchResults.FirstOrDefault(r => r.SD == lastSD);
+            SearchResultSelectedItem = _searchResults.FirstOrDefault(r => r.SD == lastSD);
             if (ActiveDictionary != null)
             {
                 ActiveSDValue = ActiveDictionary.DictionaryValues.FirstOrDefault(r => r.SD == lastChildSD);
@@ -593,12 +585,12 @@ namespace SimpleDictionary.ViewModels
         {
             try
             {
-                this.SearchResults =
-                    new ObservableCollection<SearchResult>(this._dataRepository.GetSearchResults(_filterString));
+                SearchResults =
+                    new ObservableCollection<SearchResult>(_dataRepository.GetSearchResults(_filterString));
             }
             catch (Exception ex)
             {
-                this._dialogService.ShowException(ex.Message);
+                _dialogService.ShowException(ex.Message);
             }
         }
 
@@ -607,25 +599,25 @@ namespace SimpleDictionary.ViewModels
             if (searchResult == null) return;
             try
             {
-                this.ActiveDictionary = _dataRepository.GetBySD(searchResult.SD);
+                ActiveDictionary = _dataRepository.GetBySD(searchResult.SD);
             }
             catch (Exception ex)
             {
-                this._dialogService.ShowException(ex.Message);
+                _dialogService.ShowException(ex.Message);
             }
         }
 
 
         private void NewChildExecute()
         {
-            this.ActiveSDValue = _dataRepository.CreateChild(ActiveDictionary);
+            ActiveSDValue = _dataRepository.CreateChild(ActiveDictionary);
         }
 
 
         private void DeleteChildExecute()
         {
             if (!CanDeleteChildExecute() ||
-                this._dialogService.ShowMessage(Const.CONFIRM_DELETE_VALUE, Const.CONFIRM_DELETE_CAPTION,
+                _dialogService.ShowMessage(Const.CONFIRM_DELETE_VALUE, Const.CONFIRM_DELETE_CAPTION,
                     DialogButton.OKCancel, DialogImage.Question) != DialogResponse.OK) return;
             try
             {
@@ -634,7 +626,7 @@ namespace SimpleDictionary.ViewModels
             }
             catch (Exception ex)
             {
-                this._dialogService.ShowException(ex.Message);
+                _dialogService.ShowException(ex.Message);
             }
         }
     }
