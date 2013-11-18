@@ -1,0 +1,207 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="SupportDBModel.Store" Alias="Self" Provider="System.Data.SqlClient"
+              ProviderManifestToken="2008"
+              xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator"
+              xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="SupportDBModelStoreContainer">
+          <EntitySet Name="SimpleDictionary" EntityType="SupportDBModel.Store.SimpleDictionary" store:Type="Tables"
+                     Schema="dbo" />
+          <AssociationSet Name="Parent_Dictionary" Association="SupportDBModel.Store.Parent_Dictionary">
+            <End Role="SimpleDictionary" EntitySet="SimpleDictionary" />
+            <End Role="SimpleDictionary1" EntitySet="SimpleDictionary" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="SimpleDictionary">
+          <Key>
+            <PropertyRef Name="SD" />
+          </Key>
+          <Property Name="SD" Type="int" Nullable="false" />
+          <Property Name="RecType" Type="char" MaxLength="1" />
+          <Property Name="ParentSD" Type="int" />
+          <Property Name="CurrentN" Type="int" Nullable="false" />
+          <Property Name="Name" Type="varchar" Nullable="false" MaxLength="100" />
+          <Property Name="Description" Type="varchar" MaxLength="200" />
+          <Property Name="SortN" Type="int" />
+          <Property Name="IntValue" Type="int" />
+          <Property Name="FloatValue" Type="float" />
+          <Property Name="StringValue" Type="varchar" MaxLength="50" />
+          <Property Name="DateValue" Type="smalldatetime" />
+          <Property Name="MultiValue" Type="varchar" MaxLength="1000" />
+          <Property Name="MemoValue" Type="varchar" MaxLength="4000" />
+          <Property Name="Comment" Type="varchar" MaxLength="1000" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
+          <Property Name="CreationDate" Type="smalldatetime" />
+          <Property Name="ChangeDate" Type="smalldatetime" />
+        </EntityType>
+        <Association Name="Parent_Dictionary">
+          <End Role="SimpleDictionary" Type="SupportDBModel.Store.SimpleDictionary" Multiplicity="0..1" />
+          <End Role="SimpleDictionary1" Type="SupportDBModel.Store.SimpleDictionary" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SimpleDictionary">
+              <PropertyRef Name="SD" />
+            </Principal>
+            <Dependent Role="SimpleDictionary1">
+              <PropertyRef Name="ParentSD" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="SimpleDictionary.Entities" Alias="Self"
+              xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation"
+              xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="DataBase" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="SimpleDictionary" EntityType="SimpleDictionary.Entities.SimpleDictionary" />
+          <AssociationSet Name="EDictionaryEDictValue" Association="SimpleDictionary.Entities.EDictionaryEDictValue">
+            <End Role="EDictionary" EntitySet="SimpleDictionary" />
+            <End Role="EDictValue" EntitySet="SimpleDictionary" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="SimpleDictionary">
+          <Key>
+            <PropertyRef Name="SD" />
+          </Key>
+          <Property Name="Name" Type="String" MaxLength="100" Unicode="false" FixedLength="false" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="200" Unicode="false" FixedLength="false" />
+          <Property Name="SortN" Type="Int32" />
+          <Property Name="Comment" Type="String" MaxLength="1000" Unicode="false" FixedLength="false" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+          <Property Name="CreationDate" Type="DateTime" />
+          <Property Name="ChangeDate" Type="DateTime" />
+          <Property Type="Int32" Name="SD" Nullable="false" />
+          <Property Type="Int32" Name="CurrentN" Nullable="false" />
+        </EntityType>
+        <EntityType Name="EDictionary" BaseType="SimpleDictionary.Entities.SimpleDictionary">
+          <Property Type="Int32" Name="ParentSD0" Nullable="false" />
+          <NavigationProperty Name="Values" Relationship="SimpleDictionary.Entities.EDictionaryEDictValue"
+                              FromRole="EDictionary" ToRole="EDictValue" />
+        </EntityType>
+        <EntityType Name="EDictValue" BaseType="SimpleDictionary.Entities.SimpleDictionary">
+          <Property Type="Int32" Name="IntValue" Nullable="false" />
+          <Property Type="Double" Name="FloatValue" Nullable="false" />
+          <Property Type="String" Name="StringValue" Nullable="false" />
+          <Property Type="DateTime" Name="DateValue" Nullable="false" />
+          <Property Type="String" Name="MultiValue" Nullable="false" />
+          <Property Type="String" Name="MemoValue" Nullable="false" />
+          <NavigationProperty Name="Dictionary" Relationship="SimpleDictionary.Entities.EDictionaryEDictValue"
+                              FromRole="EDictValue" ToRole="EDictionary" />
+          <Property Type="Int32" Name="ParentSD" Nullable="false" />
+        </EntityType>
+        <Association Name="EDictionaryEDictValue">
+          <End Type="SimpleDictionary.Entities.EDictionary" Role="EDictionary" Multiplicity="1" />
+          <End Type="SimpleDictionary.Entities.EDictValue" Role="EDictValue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EDictionary">
+              <PropertyRef Name="SD" />
+            </Principal>
+            <Dependent Role="EDictValue">
+              <PropertyRef Name="ParentSD" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="SupportDBModelStoreContainer" CdmEntityContainer="DataBase">
+          <EntitySetMapping Name="SimpleDictionary">
+            <EntityTypeMapping TypeName="IsTypeOf(SimpleDictionary.Entities.SimpleDictionary)">
+              <MappingFragment StoreEntitySet="SimpleDictionary">
+                <ScalarProperty Name="CurrentN" ColumnName="CurrentN" />
+                <ScalarProperty Name="SD" ColumnName="SD" />
+                <ScalarProperty Name="ChangeDate" ColumnName="ChangeDate" />
+                <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="Comment" ColumnName="Comment" />
+                <ScalarProperty Name="SortN" ColumnName="SortN" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="IsTypeOf(SimpleDictionary.Entities.EDictionary)">
+              <MappingFragment StoreEntitySet="SimpleDictionary">
+                <ScalarProperty Name="ParentSD0" ColumnName="ParentSD" />
+                <ScalarProperty Name="SD" ColumnName="SD" />
+                <Condition ColumnName="RecType" Value="D" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="IsTypeOf(SimpleDictionary.Entities.EDictValue)">
+              <MappingFragment StoreEntitySet="SimpleDictionary">
+                <ScalarProperty Name="ParentSD" ColumnName="ParentSD" />
+                <ScalarProperty Name="SD" ColumnName="SD" />
+                <ScalarProperty Name="MemoValue" ColumnName="MemoValue" />
+                <ScalarProperty Name="MultiValue" ColumnName="MultiValue" />
+                <ScalarProperty Name="DateValue" ColumnName="DateValue" />
+                <ScalarProperty Name="StringValue" ColumnName="StringValue" />
+                <ScalarProperty Name="FloatValue" ColumnName="FloatValue" />
+                <ScalarProperty Name="IntValue" ColumnName="IntValue" />
+                <Condition ColumnName="RecType" Value="V" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="SDEntities" DisplayType="true">
+        <EntityTypeShape EntityType="SimpleDictionary.Entities.SimpleDictionary" Width="2.125" PointX="0.75"
+                         PointY="0.75" Height="2.7494921875" IsExpanded="true" />
+        <EntityTypeShape EntityType="SimpleDictionary.Entities.EDictionary" Width="1.75" PointX="4.625" PointY="0.625"
+                         Height="1.2110807291666668" />
+        <InheritanceConnector EntityType="SimpleDictionary.Entities.EDictionary">
+          <ConnectorPoint PointX="2.875" PointY="1.1968896484375" />
+          <ConnectorPoint PointX="4.625" PointY="1.1968896484375" />
+        </InheritanceConnector>
+        <EntityTypeShape EntityType="SimpleDictionary.Entities.EDictValue" Width="1.875" PointX="5.25" PointY="3.25"
+                         Height="2.5571907552083317" />
+        <InheritanceConnector EntityType="SimpleDictionary.Entities.EDictValue">
+          <ConnectorPoint PointX="2.875" PointY="3.4708968098958333" />
+          <ConnectorPoint PointX="5.25" PointY="3.4708968098958333" />
+        </InheritanceConnector>
+        <InheritanceConnector EntityType="SimpleDictionary.Entities.EDictValue">
+          <ConnectorPoint PointX="1.8125" PointY="3.4994921875" />
+          <ConnectorPoint PointX="1.8125" PointY="3.8744921874999996" />
+          <ConnectorPoint PointX="3.25" PointY="3.8744921874999996" />
+          <ConnectorPoint PointX="3.25" PointY="2.875" />
+          <ConnectorPoint PointX="5.572916666666667" PointY="2.8749999999999996" />
+          <ConnectorPoint PointX="5.739583333333333" PointY="2.875" />
+          <ConnectorPoint PointX="6.1875" PointY="2.875" />
+          <ConnectorPoint PointX="6.1875" PointY="3.25" />
+        </InheritanceConnector>
+        <InheritanceConnector EntityType="SimpleDictionary.Entities.EDictionary">
+          <ConnectorPoint PointX="2.875" PointY="1.2930403645833333" />
+          <ConnectorPoint PointX="4.625" PointY="1.2930403645833333" />
+        </InheritanceConnector>
+        <AssociationConnector Association="SimpleDictionary.Entities.EDictionaryEDictValue">
+          <ConnectorPoint PointX="5.65625" PointY="2.0283821614583335" />
+          <ConnectorPoint PointX="5.65625" PointY="3.25" />
+        </AssociationConnector>
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>

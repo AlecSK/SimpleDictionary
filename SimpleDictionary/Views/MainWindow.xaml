@@ -1,0 +1,28 @@
+﻿<Window x:Class="SimpleDictionary.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        d:DataContext="{d:DesignData Source=../ViewModels/SampleMainWindowViewModel.xaml}"
+        Height="600" Width="1024" Title="Simple Dictionary" Icon="/SimpleDictionary;component/Images/Document.ico"
+        mc:Ignorable="d"
+        xmlns:my="clr-namespace:SimpleDictionary.Views">
+    <!--d:DataContext="{d:DesignData Source=../ViewModels/SampleMainWindowViewModel.xaml}"-->
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="100*" />
+            <ColumnDefinition Width="200*" />
+        </Grid.ColumnDefinitions>
+        <my:HeaderView Grid.ColumnSpan="2" />
+        <my:DictListView Grid.Row="2" Margin="6" />
+        <my:SDictView Grid.Column="1" Grid.Row="1" Margin="6" MinWidth="400" Grid.RowSpan="3" />
+        <my:AppParametersView Grid.Row="3" Margin="6" VerticalAlignment="Top" />
+        <my:FilterView Grid.Row="1" Margin="6" />
+    </Grid>
+</Window>

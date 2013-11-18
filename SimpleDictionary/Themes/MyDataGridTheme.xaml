@@ -1,0 +1,31 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="MyTheme.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+    <!-- datagrid specific resources -->
+    <SolidColorBrush x:Key="HeaderBorder" Color="White" />
+    <SolidColorBrush x:Key="GridBorder" Color="#FFD7D5D8" />
+    <SolidColorBrush x:Key="HeaderBackground" Color="#FFF4FAFD" />
+    <SolidColorBrush x:Key="GridLines" Color="#FFF4FAFD" />
+
+    <!-- DataGrid -->
+    <Style TargetType="{x:Type DataGrid}">
+        <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" />
+        <Setter Property="BorderBrush" Value="{StaticResource GridBorder}" />
+        <Setter Property="VerticalGridLinesBrush" Value="{StaticResource GridLines}" />
+        <Setter Property="HorizontalGridLinesBrush" Value="{StaticResource GridLines}" />
+    </Style>
+
+    <Style TargetType="{x:Type DataGridColumnHeader}">
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="IsTabStop" Value="False" />
+        <!--<Setter Property="SeparatorBrush" Value="{StaticResource HeaderSeparator}"/>-->
+        <Setter Property="Background" Value="{StaticResource HeaderBackground}" />
+        <Setter Property="Padding" Value="5,2,5,2" />
+        <Setter Property="BorderBrush" Value="{StaticResource HeaderBorder}" />
+        <Setter Property="BorderThickness" Value="1" />
+    </Style>
+</ResourceDictionary>

@@ -1,0 +1,58 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:col="clr-namespace:System.Collections;assembly=mscorlib"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                    xmlns:c="clr-namespace:System.Windows.Controls;assembly=PresentationFramework"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Виды отображения DataGrid RowDelails -->
+    <XmlDataProvider x:Key="ComboBoxDataSource1">
+        <x:XData>
+            <x:Dictionary>
+
+                <c:DataGridRowDetailsVisibilityMode>Collapsed</c:DataGridRowDetailsVisibilityMode>
+                <sys:String>Скрыты</sys:String>
+
+                <c:DataGridRowDetailsVisibilityMode>VisibleWhenSelected</c:DataGridRowDetailsVisibilityMode>
+                <sys:String>Строка</sys:String>
+
+                <c:DataGridRowDetailsVisibilityMode>Visible</c:DataGridRowDetailsVisibilityMode>
+                <sys:String>Все</sys:String>
+
+            </x:Dictionary>
+        </x:XData>
+    </XmlDataProvider>
+
+
+    <!-- Виды отображения DataGrid RowDelails -->
+    <XmlDataProvider x:Key="ComboBoxDataSource" XPath="Dictionary">
+        <x:XData>
+            <x:Dictionary>
+                <x:Dictionary.Keys>
+                    <c:DataGridRowDetailsVisibilityMode Values="Collapsed" />
+                    <c:DataGridRowDetailsVisibilityMode Values="VisibleWhenSelected" />
+                    <c:DataGridRowDetailsVisibilityMode Values="Visible" />
+                </x:Dictionary.Keys>
+                <x:Dictionary.Values>
+                    <sys:String>Скрыты</sys:String>
+                    <sys:String>Строка</sys:String>
+                    <sys:String>Все</sys:String>
+                </x:Dictionary.Values>
+            </x:Dictionary>
+        </x:XData>
+    </XmlDataProvider>
+
+
+    <XmlDataProvider x:Key="DefaultRowDetailsVisibilityModesList" XPath="DefaultRowDetailsVisibilityMode">
+        <x:XData>
+            <DefaultRowDetailsVisibilityMode xmlns="">
+                <Key>
+                    <c:DataGridRowDetailsVisibilityMode Values="VisibleWhenSelected" />
+                </Key>
+                <Value>
+                    <sys:String>Строка</sys:String>
+                </Value>
+            </DefaultRowDetailsVisibilityMode>
+        </x:XData>
+    </XmlDataProvider>
+
+</ResourceDictionary>

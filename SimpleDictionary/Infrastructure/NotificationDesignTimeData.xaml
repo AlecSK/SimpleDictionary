@@ -1,0 +1,10 @@
+﻿<Notifications xmlns="clr-namespace:SimpleDictionary.Infrastructure">
+    <Notification Id="1" Title="Notification #1" ImageUrl="pack://application:,,,/Images/Error.png"
+                  Message="Ошибка доступа к данным." />
+    <Notification Id="2" Title="Notification #2" ImageUrl="pack://application:,,,/Images/Error.png"
+                  Message="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." />
+    <Notification Id="3" Title="Notification #3" ImageUrl="pack://application:,,,/Images/Error.png"
+                  Message="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." />
+    <Notification Id="4" Title="Notification #4" ImageUrl="pack://application:,,,/Images/Error.png"
+                  Message="Linq System error." />
+</Notifications>

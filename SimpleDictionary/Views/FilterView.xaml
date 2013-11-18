@@ -1,0 +1,27 @@
+﻿<UserControl x:Class="SimpleDictionary.Views.FilterView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:SimpleDictionary.ViewModels"
+             d:DataContext="{d:DesignData Source=../ViewModels/SampleMainWindowViewModel.xaml}"
+             mc:Ignorable="d" d:DesignHeight="60" d:DesignWidth="300">
+    <!--d:DataContext="{d:DesignInstance {x:Type local:MainWindowViewModel}}"-->
+    <Border BorderBrush="LightGray" BorderThickness="1" CornerRadius="10">
+        <Expander IsExpanded="False" Header="{Binding FilterName}" IsEnabled="{Binding CanNavigate}">
+            <Grid Margin="6,0,6,6">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="28" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="80*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBox Margin="3,3,0,3"
+                         Text="{Binding FilterString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <Button Content="X" Grid.Column="1" Margin="0,3,3,3" Padding="7,1"
+                        Command="{Binding ClearFilterCommand}" />
+            </Grid>
+        </Expander>
+    </Border>
+</UserControl>

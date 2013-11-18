@@ -1,0 +1,35 @@
+﻿<UserControl x:Class="SimpleDictionary.Views.DictListView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:SimpleDictionary.ViewModels"
+             d:DataContext="{d:DesignData Source=../ViewModels/SampleMainWindowViewModel.xaml}"
+             mc:Ignorable="d"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+    </UserControl.Resources>
+    <Border BorderBrush="LightGray" BorderThickness="1" CornerRadius="10">
+        <Grid>
+            <ListBox BorderBrush="LightGray" BorderThickness="0" Margin="3"
+                     ItemsSource="{Binding SearchResults}"
+                     SelectedItem="{Binding Path=SearchResultSelectedItem, Mode=TwoWay}"
+                     IsEnabled="{Binding Path=CanNavigate}" HorizontalContentAlignment="Stretch">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Margin="0,1">
+                            <Border BorderBrush="LightGray" BorderThickness="0" CornerRadius="10" Padding="6,0">
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock Text="{Binding Path=FullName}" TextWrapping="NoWrap"
+                                               TextTrimming="CharacterEllipsis" />
+                                    <TextBlock Text="{Binding Path=Description}" TextWrapping="NoWrap"
+                                               TextTrimming="CharacterEllipsis" />
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Grid>
+    </Border>
+</UserControl>

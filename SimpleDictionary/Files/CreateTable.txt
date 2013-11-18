@@ -1,0 +1,40 @@
+/****** Object:  Table [dbo].[SimpleDictionary]    Script Date: 16.01.2013 11:02:31 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+SET ANSI_PADDING ON
+GO
+
+--ALTER DATABASE CURRENT 
+--COLLATE Cyrillic_General_CI_AS
+
+CREATE TABLE [dbo].[SimpleDictionary] (
+    [SD]           INT            NOT NULL,
+    [RecType]      CHAR (1)       NULL,
+    [ParentSD]     INT            NULL,
+    [CurrentN]     INT            NOT NULL,
+    [Name]         VARCHAR (100)  NOT NULL,
+    [Description]  VARCHAR (200)  NULL,
+    [SortN]        INT            NULL,
+    [IntValue]     INT            NULL,
+    [FloatValue]   FLOAT (53)     NULL,
+    [StringValue]  VARCHAR (50)   NULL,
+    [DateValue]    SMALLDATETIME  NULL,
+    [MultiValue]   VARCHAR (1000) NULL,
+    [MemoValue]    VARCHAR (4000) NULL,
+    [Comment]      VARCHAR (1000) NULL,
+    [IsDeleted]    BIT            NOT NULL,
+    [CreationDate] SMALLDATETIME  CONSTRAINT [DF_SimpleDictionary_CreationDate] DEFAULT (getdate()) NULL,
+    [ChangeDate]   SMALLDATETIME  NULL,
+    CONSTRAINT [XPKSimple_Dictionary] PRIMARY KEY CLUSTERED ([SD] ASC),
+    CONSTRAINT [XAK2Simple_Dictionary] UNIQUE NONCLUSTERED ([ParentSD] ASC, [Name] ASC),
+    CONSTRAINT [XAK1Simple_Dictionary] UNIQUE NONCLUSTERED ([ParentSD] ASC, [CurrentN] ASC),
+    CONSTRAINT [Parent_Dictionary] FOREIGN KEY ([ParentSD]) REFERENCES [dbo].[SimpleDictionary] ([SD])
+);
+
+GO
+
+

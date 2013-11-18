@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="SDLinq">
+  <DataContextMoniker Name="/SDLinqDataContext" />
+  <nestedChildShapes>
+    <classShape Id="d65bb26f-4177-491b-b1cc-85f4372f74a3" absoluteBounds="3.125, 1.875, 2, 4.0785139973958326">
+      <DataClassMoniker Name="/SDLinqDataContext/SimpleDictionary" />
+      <nestedChildShapes>
+        <elementListCompartment Id="2b5a1aa7-42b3-4bf3-a18d-c06418307dd3" absoluteBounds="3.14, 2.335, 1.9700000000000002, 3.518513997395833" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(3.83423076923077 : 5.95351399739583); (3.83423076923077 : 6.20351399739583); (4.42961538461539 : 6.20351399739583); (4.42961538461539 : 5.95351399739583)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+      <AssociationMoniker Name="/SDLinqDataContext/SimpleDictionary/SimpleDictionary_SimpleDictionary" />
+      <nodes>
+        <classShapeMoniker Id="d65bb26f-4177-491b-b1cc-85f4372f74a3" />
+        <classShapeMoniker Id="d65bb26f-4177-491b-b1cc-85f4372f74a3" />
+      </nodes>
+    </associationConnector>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>

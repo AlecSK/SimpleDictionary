@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<Database Name="SupportDB" EntityNamespace="SimpleDictionary.Linq" Class="SDLinqDataContext"
+          xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=.;Initial Catalog=SupportDB;Integrated Security=True"
+              SettingsObjectName="SimpleDictionary.Properties.Settings" SettingsPropertyName="DBConnectionString"
+              Provider="System.Data.SqlClient" />
+  <Table Name="dbo.SimpleDictionary" Member="SimpleDictionary">
+    <Type Name="SimpleDictionary">
+      <Column Name="SD" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="RecType" Type="System.Char" DbType="Char(1)" CanBeNull="true" />
+      <Column Name="ParentSD" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="CurrentN" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="VarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="Description" Type="System.String" DbType="VarChar(200)" CanBeNull="true" />
+      <Column Name="SortN" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="IntValue" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="FloatValue" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="StringValue" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="DateValue" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
+      <Column Name="MultiValue" Type="System.String" DbType="VarChar(1000)" CanBeNull="true" />
+      <Column Name="MemoValue" Type="System.String" DbType="VarChar(4000)" CanBeNull="true" />
+      <Column Name="Comment" Type="System.String" DbType="VarChar(1000)" CanBeNull="true" />
+      <Column Name="IsDeleted" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="CreationDate" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
+      <Column Name="ChangeDate" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
+      <Association Name="SimpleDictionary_SimpleDictionary" Member="SimpleDictionary2" ThisKey="SD" OtherKey="ParentSD"
+                   Type="SimpleDictionary" />
+      <Association Name="SimpleDictionary_SimpleDictionary" Member="SimpleDictionary1" ThisKey="ParentSD" OtherKey="SD"
+                   Type="SimpleDictionary" IsForeignKey="true" />
+    </Type>
+  </Table>
+</Database>

@@ -1,0 +1,10 @@
+﻿<?xml version="1.0"?>
+
+<ArrayOfSDOption xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <SDOption Description="Целочисленное" GenerateStruct="false" AddComment="false" Name="IntValue" />
+  <SDOption Description="Вещественное" GenerateStruct="true" AddComment="false" Name="FloatValue" />
+  <SDOption Description="Строковое" GenerateStruct="false" AddComment="true" Name="StringValue" />
+  <SDOption Description="Дата" GenerateStruct="false" AddComment="false" Name="DateValue" />
+  <SDOption Description="Множественное" GenerateStruct="false" AddComment="false" Name="MultiValue" />
+  <SDOption Description="Многострочный текст" GenerateStruct="false" AddComment="false" Name="MemoValue" />
+</ArrayOfSDOption>

@@ -1,0 +1,57 @@
+﻿<viewModels:MainWindowViewModel
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:viewModels="clr-namespace:SimpleDictionary.ViewModels"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+    xmlns:models="clr-namespace:SimpleDictionary.Models"
+    xmlns:c="clr-namespace:System.Windows.Controls;assembly=PresentationFramework"
+    IsRowDetailsVisible="True"
+    CanNavigate="True"
+    FilterString="12"
+    FilterName="Фильтр: 12"
+    VersionNumber="Alpha.1234" VersionDate="01.01.2013">
+
+    <!--Пример заполнения списка словарей-->
+    <viewModels:MainWindowViewModel.SearchResults>
+        <models:SearchResult SD="11" SortNumber="11" ItemName="App.Config" FullName="App.Config ( 6 )"
+                             Description="Параметры приложения" ValuesCount="6" />
+        <models:SearchResult SD="12" SortNumber="12" ItemName="Dictionary12" FullName="Dictionary12 ( 7 )"
+                             Description="Словарь параметров 12" ValuesCount="7" />
+        <models:SearchResult SD="13" SortNumber="13" ItemName="Dictionary13" FullName="Dictionary13 ( 5 )"
+                             Description="Словарь параметров 13" ValuesCount="5" />
+    </viewModels:MainWindowViewModel.SearchResults>
+
+
+    <viewModels:MainWindowViewModel.SelectedRowDetailsVisibilityMode>
+        <viewModels:RowDetailsVisibilityMode>
+            <viewModels:RowDetailsVisibilityMode.Description>VisibleWhenSelected</viewModels:RowDetailsVisibilityMode.Description>
+            <viewModels:RowDetailsVisibilityMode.VisibilityMode>VisibleWhenSelected</viewModels:RowDetailsVisibilityMode.VisibilityMode>
+        </viewModels:RowDetailsVisibilityMode>
+    </viewModels:MainWindowViewModel.SelectedRowDetailsVisibilityMode>
+    <viewModels:MainWindowViewModel.ActiveDictionary>
+        <SDictionary xmlns="clr-namespace:SimpleDictionary.Models"
+                     SD="12" RecType="D" ParentSD="0" CurrentN="12" SortN="120"
+                     ItemName="Dictionary12" Description="Словарь параметров 12"
+                     IsDeleted="False">
+            <SDictionary.DictionaryOptions>
+                <SDOption Name="IntValue" Description="Целочисленное" GenerateStruct="True" GenerateEnum="True" />
+                <SDOption Name="FloatValue" Description="Вещественное" GenerateStruct="True" GenerateEnum="False" />
+                <SDOption Name="StringValue" Description="Строковое" GenerateStruct="True" GenerateEnum="False" />
+                <SDOption Name="DateValue" Description="Дата" GenerateStruct="True" GenerateEnum="False" />
+                <SDOption Name="MultiValue" Description="Множественное" GenerateStruct="True" GenerateEnum="False" />
+                <SDOption Name="MemoValue" Description="Многострочный текст" GenerateStruct="True" GenerateEnum="False" />
+            </SDictionary.DictionaryOptions>
+            <SDictionary.DictionaryValues>
+                <SDValue SD="12" RecType="V" ParentSD="12" CurrentN="12" ItemName="Value12"
+                         Description="Словарный параметр 12" SortN="120" Comment="комментарии" IsDeleted="False"
+                         IsValid="True" />
+                <SDValue SD="13" RecType="V" ParentSD="13" CurrentN="13" ItemName="Value13"
+                         Description="Словарный параметр 13" SortN="130" IsDeleted="False" IsValid="True" />
+                <SDValue SD="14" RecType="V" ParentSD="14" CurrentN="14" ItemName="Value14"
+                         Description="Словарный параметр 14" SortN="140" IsDeleted="False" IsValid="True" />
+                <SDValue SD="15" RecType="V" ParentSD="15" CurrentN="15" ItemName="Value15"
+                         Description="Словарный параметр 15" SortN="150" IsDeleted="False" IsValid="True" />
+            </SDictionary.DictionaryValues>
+        </SDictionary>
+    </viewModels:MainWindowViewModel.ActiveDictionary>
+</viewModels:MainWindowViewModel>
