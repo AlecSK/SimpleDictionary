@@ -1,7 +1,0 @@
-﻿Due to the limitations of the supported zip file format, the following file(s) had to be renamed.
-
-Original File Name  ->  New File Name
-SimpleDictionary/Files/Схема.png -> SimpleDictionary/Files/File1.png
-SimpleDictionary/Models/Модель данных.cd -> SimpleDictionary/Models/File2.cd
-SimpleDictionary.Tests/Тестовые ссылки/SimpleDictionary.accessor -> SimpleDictionary.Tests/1/SimpleDictionary.accessor
-Структура приложения.dgml -> File4.dgml
